@@ -8,7 +8,9 @@
       <div class="insurance-content--group">
         <img class="insurance-content-head__icon" src="@/assets/image/icons/ask.svg" alt="">
         <h3 class="insurance-content__title">
-          <slot name="question"></slot>
+          <span>
+            <slot name="question"></slot>
+          </span>
         </h3>
       </div>
 
@@ -59,7 +61,7 @@ export default {
 
   &-content {
     padding: 66px 82px 76px 60px;
-    background-color: #F0F9FF;
+    background-color: $bgGentle;
 
     &--group {
       display: flex;
@@ -68,9 +70,27 @@ export default {
     }
 
     &__title {
+      position: relative;
       @include mixins.setFontParams(800, 26px);
       color: mixins.$textDark;
       margin: 0;
+
+      span {
+        position: relative;
+        z-index: 1;
+      }
+
+      &:after{
+        content: '';
+        position: absolute;
+        background-image: url("@/assets/image/icons/quotes.svg");
+        background-repeat: no-repeat;
+        left: -47px;
+        top: -27px;
+        width: 80px;
+        height: 63px;
+        z-index: 0;
+      }
     }
 
     &-head {

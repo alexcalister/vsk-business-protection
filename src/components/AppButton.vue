@@ -1,12 +1,15 @@
 <template>
-  <button class="btn">
-    <slot>Оставить заявку</slot>
+  <button class="btn" @click="handlerClick">
+    <slot></slot>
   </button>
 </template>
 
 <script>
 export default {
-  name: 'AppButton'
+  name: 'AppButton',
+  methods: {
+    handlerClick() {}
+  }
 }
 </script>
 
@@ -16,6 +19,7 @@ export default {
 .btn {
   @include mixins.bgGradient();
   @include mixins.setFontParams(500, 24px);
+  line-height: 1;
   overflow: hidden;
   position: relative;
   border-radius: 31px;
@@ -30,7 +34,7 @@ export default {
     background: rgba(215, 233, 255, 0.19);
     height: calc(100% - 4px);
     top: 2px;
-    transform: skewX(10deg);
+    transform: skewX(19deg);
   }
 
   &:after {

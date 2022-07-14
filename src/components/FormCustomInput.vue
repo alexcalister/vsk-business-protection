@@ -1,10 +1,10 @@
 <template>
-  <div v-if="format === 'input'">
-    <input
-      :value="value"
-      :placeholder="`${placeholder}${required ? '*' : ''}`"
-      type="text">
-  </div>
+  <input
+    v-if="format === 'input'"
+    :value="value"
+    :placeholder="setPlaceholder"
+    class="custom-input"
+    type="text">
   <div v-else-if="format === 'select'"></div>
 </template>
 
@@ -25,15 +25,29 @@ export default {
     placeholder: {
       type: String,
       default: ''
-    },
-    arg: {
-      type: String,
-      default: ''
+    }
+  },
+  computed: {
+    setPlaceholder() {
+      return `${this.placeholder}${this.required ? '*' : ''}`
     }
   }
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import '@/assets/styles/colors';
+.custom-input {
+  border: 2px solid #94C7E9;
+  border-radius: 30px;
+  background-color: $textWhite;
+  padding: 21px 27px;
 
+  &::-webkit-input-placeholder,
+  &::-moz-placeholder,
+  &:-moz-placeholder,
+  &:-ms-input-placeholder  {color:#C5C5C5;}
+
+  color: $textDark;
+}
 </style>

@@ -53,13 +53,17 @@ export default {
   overflow-y: auto;
   z-index: 5;
   width: 100%;
-  min-height: 100vh;
+  max-height: 100vh;
 
   &-content {
     background: $bgGentle;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
     border-radius: 22px;
     padding: 50px 98px 58px;
+    max-width: calc(560px - 196px);
+    width: 100%;
+    max-height: calc(100vh - 128px);
+    overflow-y: auto;
   }
 
   &-header {
@@ -77,12 +81,18 @@ export default {
     margin: 44px auto 0;
   }
 
+  &-form {
+    display: flex;
+    flex-direction: column;
+  }
+
   &-btn {
     &-close {}
 
     &-send {
       padding: 15px 60px !important;
-      margin-top: 44px;
+      margin: 44px auto 0;
+      display: block;
     }
   }
 }

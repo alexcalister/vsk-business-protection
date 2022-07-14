@@ -104,16 +104,19 @@
       Заполните форму
     </template>
     <template #form>
-      <form-custom-input
-        v-for="({placeholder, type, reqiured, value, directive}) of formInputsList"
+      <template
+        v-for="({placeholder, type, reqiured, value}) of formInputsList"
         :key="placeholder"
-        :format="type"
-        :required="reqiured"
-        :value="value"
-        :placeholder="placeholder"
-        :arg="directive"
       >
-      </form-custom-input>
+        <form-custom-input
+          :format="type"
+          :required="reqiured"
+          :value="value"
+          :placeholder="placeholder"
+          class="form-field"
+        >
+        </form-custom-input>
+      </template>
     </template>
   </app-modal>
 </template>
@@ -125,8 +128,6 @@ import InsuranceInfo from './components/InsuranceInfo.vue'
 import CheckList from '@/components/CheckList'
 import AppModal from '@/components/AppModal'
 import FormCustomInput from '@/components/FormCustomInput'
-
-import { PHONE, SCALE } from '@/consts'
 
 export default {
   name: 'App',
@@ -194,15 +195,13 @@ export default {
           type: 'input',
           reqiured: true,
           value: '',
-          placeholder: 'Принципал',
-          directive: `${SCALE}-3`
+          placeholder: 'Принципал'
         },
         {
           type: 'input',
           reqiured: true,
           value: '',
-          placeholder: 'ИНН Принципала',
-          directive: `${SCALE}-3`
+          placeholder: 'ИНН Принципала'
         },
         {
           type: 'input',
@@ -214,8 +213,7 @@ export default {
           type: 'input',
           reqiured: true,
           value: '',
-          placeholder: 'ИНН Бенефициара',
-          directive: `${SCALE}-5`
+          placeholder: 'ИНН Бенефициара'
         },
         {
           type: 'input',
@@ -227,6 +225,11 @@ export default {
           type: 'select',
           value: ['44-ФЗ', '223-ФЗ', '185-ФЗ (615-ПП)'],
           placeholder: 'Вид контрактов'
+        },
+        {
+          type: 'select',
+          placeholder: 'Тип гарантии',
+          value: ['Для участия в конкурсе', 'Для заключения контракта', 'Для получения аванса', 'Для обеспечения гарантийных обязательств']
         },
         {
           type: 'input',
@@ -244,8 +247,7 @@ export default {
           type: 'input',
           reqiured: true,
           value: '',
-          placeholder: 'Телефон',
-          directive: PHONE
+          placeholder: 'Телефон'
         },
         {
           type: 'input',
@@ -467,5 +469,11 @@ export default {
   display: flex;
   justify-content: center;
   margin: 130px auto 112px;
+}
+
+.form-field {
+  &:not(:last-child) {
+    margin-bottom: 8px;
+  }
 }
 </style>

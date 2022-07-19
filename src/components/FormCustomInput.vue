@@ -5,6 +5,7 @@
     :placeholder="setPlaceholder"
     @input="$emit('update:modelValue', $event.target.value)"
     class="custom-input"
+    :class="{error}"
     type="text"
   >
   <div
@@ -14,19 +15,22 @@
   >
     <div
       class="custom-input"
+      :class="{error}"
       :style="{
         'z-index': showSelect ? 7 : 1
       }"
     >
       {{ setPlaceholder }}
+      <indicator-arrow class="custom-input__arrow" :rotate="showSelect" />
     </div>
     <div
       class="custom-input-select__dropdown custom-input"
       v-show="showSelect"
-      @click.stop
     >
       <template v-for="(value, idx) of valuesList" :key="value">
-        <div class="custom-input-select__group">
+        <div
+          @click="showSelect = !showSelect"
+          class="custom-input-select__group">
           <input
             class="custom-input-select__input"
             type="radio"
@@ -47,6 +51,7 @@
 
 <script>
 import { FORM_TYPE_INPUT, FORM_TYPE_CHOICE } from '@/consts'
+import IndicatorArrow from '@/components/IndicatorArrow'
 
 export default {
   name: 'AppCustomInput',
@@ -54,7 +59,14 @@ export default {
     input: FORM_TYPE_INPUT,
     choice: FORM_TYPE_CHOICE
   },
+  components: {
+    IndicatorArrow
+  },
   props: {
+    error: {
+      type: Boolean,
+      default: false
+    },
     modelValue: [String, Array],
     format: {
       validator(value) {
@@ -86,7 +98,7 @@ export default {
   },
   computed: {
     setPlaceholder() {
-      return `${this.placeholder}${this.required ? '*' : ''}`
+      return `${this.placeholder}${this.required && this.format === this.$options.formTypes.input ? '*' : ''}`
     }
   }
 }
@@ -102,6 +114,23 @@ export default {
   border-radius: 30px;
   background-color: colors.$textWhite;
   padding: 21px 27px;
+  width: calc(100% - 54px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &__arrow {
+    width: 8px;
+    height: 8px;
+
+    &:after {
+      border-color: colors.$textAccentDark;
+    }
+  }
+
+  &.error {
+    border: 2px solid red;
+  }
 
   &::-webkit-input-placeholder,
   &::-moz-placeholder,
@@ -120,8 +149,10 @@ export default {
     }
 
     &__dropdown {
+      flex-direction: column;
+      align-items: flex-start;
       position: absolute;
-      width: calc(100% - 56px);
+      width: calc(100% - 53px);
       top: 2px;
       left: -1px;
       padding-top: 90px;

@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import { disableScroll, enablesScroll } from '@/windowScroll'
+
 export default {
   name: 'AppHeaderBank',
   data() {
@@ -55,6 +57,15 @@ export default {
   computed: {
     isMobile() {
       return this.windowWidth <= 820
+    }
+  },
+  watch: {
+    burgerActive(oldValue) {
+      if (oldValue) {
+        disableScroll()
+      } else {
+        enablesScroll()
+      }
     }
   },
   mounted() {

@@ -45,9 +45,11 @@ export default {
     resolve: null
   },
   methods: {
-    send() {
+    assecc() {
       enablesScroll()
       this.showModal = false
+    },
+    send() {
       this.$options.modalController.resolve(true)
     },
     open() {
@@ -86,19 +88,26 @@ export default {
   padding: 10px;
   overflow-y: auto;
   z-index: 5;
-  width: 100%;
+  width: calc(100% - 20px);
   max-height: 100vh;
-  min-height: 100vh;
+  min-height: calc(100vh - 20px);
 
   &-content {
     background: colors.$bgGentle;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
     border-radius: 22px;
-    padding: 50px 98px 58px;
-    max-width: calc(560px - 196px);
-    width: 100%;
-    max-height: calc(100vh - 128px);
     overflow-y: auto;
+    width: calc(560px - 40px);
+    max-width: calc(560px - 40px);
+    max-height: calc(100vh - 60px);
+    padding: 20px;
+
+    @media (min-width: 1220px) {
+      padding: 50px 98px 58px;
+      width: calc(100% - 196px);
+      max-width: calc(560px - 196px);
+      max-height: calc(100vh - 128px);
+    }
   }
 
   &-header {

@@ -1,20 +1,6 @@
 {
   "pages": [
     {
-      "id": "1",
-      "title": "Защита бизнеса",
-      "descr": "Комплексное страхование имущества юридических лиц",
-      "file": "",
-      "imgSrc": "protection.png"
-    },
-    {
-      "id": "2",
-      "title": "Страхование гражданской ответственность",
-      "descr": "Защита бизнеса от непредвиденныхрасходов",
-      "file": "",
-      "imgSrc": "civil-liability-insurance.png"
-    },
-    {
       "id": "3",
       "title": "Страхование грузов",
       "descr": "Страхование любых видов грузов от непредвиденных обстоятельств",
@@ -41,27 +27,6 @@
       "descr": "Максимальная защита парков автомобилей для корпоративных клиентов",
       "file": "https://docs.google.com/spreadsheets/d/1qtTR6SVYakGWn1DnoESMQ3fuWRSp0twB/edit?usp=sharing&ouid=100160115022640881129&rtpof=true&sd=true",
       "imgSrc": "casco.png"
-    },
-    {
-      "id": "7",
-      "title": "Осаго",
-      "descr": "Обязательное страхование автогражданской ответственности для бизнеса",
-      "file": "",
-      "imgSrc": "osago.png"
-    },
-    {
-      "id": "8",
-      "title": "",
-      "descr": "",
-      "file": "",
-      "imgSrc": "all-insurance-services.png"
-    },
-    {
-      "id": "9",
-      "title": "Банковские гарантии",
-      "descr": "Страхование предпринимательских рисков на случай неисполнения/ненадлежащего исполнения обязательств по договорам о предоставлении банковских гарантий",
-      "file": "https://docs.google.com/document/d/1sMhOgt5nE5WGLxHsiP4OU3at1TOTb1yA/edit?usp=sharing&ouid=100160115022640881129&rtpof=true&sd=true",
-      "imgSrc": "bank-guarantees.png"
     }
   ]
 }

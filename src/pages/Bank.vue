@@ -71,14 +71,142 @@
     </insurance-info>
   </section>
 
-  <section v-if="false" class="container bank--mb">
+  <section class="container bank--mb">
     <!-- Отправить заявку -->
     <app-button class="bank--btn" @click="openModal">Отправить заявку</app-button>
   </section>
 
   <app-footer />
 
-  <app-modal ref="modal"></app-modal>
+  <app-modal ref="modalForm">
+    <template #title>
+      Заполните форму
+    </template>
+    <template #form>
+      <!--   FormInputsList   -->
+      <div class="form-field">
+        <form-custom-input
+          :format="$options.formTypes.input"
+          required
+          placeholder="Принципал"
+          :modelValue="principal"
+          :error="v$.principal.$error"
+          @update:modelValue="v => principal = v"
+        />
+      </div>
+      <div class="form-field">
+        <form-custom-input
+          :format="$options.formTypes.input"
+          required
+          :error="v$.innPrincipal.$error"
+          placeholder="ИНН принципала"
+          :modelValue="innPrincipal"
+          @update:modelValue="v => innPrincipal = v"
+        />
+      </div>
+      <div class="form-field">
+        <form-custom-input
+          :format="$options.formTypes.input"
+          required
+          :error="v$.beneficiary.$error"
+          placeholder="Бенефициар"
+          :modelValue="beneficiary"
+          @update:modelValue="v => beneficiary = v"
+        />
+      </div>
+      <div class="form-field">
+        <form-custom-input
+          :format="$options.formTypes.input"
+          required
+          :error="v$.innBeneficiary.$error"
+          placeholder="ИНН бенефициара"
+          :modelValue="innBeneficiary"
+          @update:modelValue="v => innBeneficiary = v"
+        />
+      </div>
+      <div class="form-field">
+        <form-custom-input
+          :format="$options.formTypes.input"
+          :error="v$.linkToPurchase.$error"
+          placeholder="Ссылка на закупку"
+          :modelValue="linkToPurchase"
+          @update:modelValue="v => linkToPurchase = v"
+        />
+      </div>
+      <div class="form-field">
+        <form-custom-input
+          :format="$options.formTypes.choice"
+          required
+          :error="v$.typesOfContracts.picked.$error"
+          placeholder="Вид контрактов"
+          :valuesList="typesOfContracts.values"
+          :modelValue="typesOfContracts.picked"
+          @update:modelValue="v => typesOfContracts.picked = v"
+        />
+      </div>
+      <div class="form-field">
+        <form-custom-input
+          :format="$options.formTypes.choice"
+          required
+          :error="v$.garantiesOfTypes.picked.$error"
+          placeholder="Тип гарантий"
+          :valuesList="garantiesOfTypes.values"
+          :modelValue="garantiesOfTypes.picked"
+          @update:modelValue="v => garantiesOfTypes.picked = v"
+        />
+      </div>
+      <div class="form-field">
+        <form-custom-input
+          :format="$options.formTypes.input"
+          required
+          :error="v$.termGuarantee.$error"
+          placeholder="Сумма гарантий"
+          :modelValue="termGuarantee"
+          @update:modelValue="v => termGuarantee = v"
+        />
+      </div>
+      <div class="form-field">
+        <form-custom-input
+          :format="$options.formTypes.input"
+          required
+          :error="v$.warrantyPeriod.$error"
+          placeholder="Срок гарантий"
+          :modelValue="warrantyPeriod"
+          @update:modelValue="v => warrantyPeriod = v"
+        />
+      </div>
+      <div class="form-field">
+        <form-custom-input
+          :format="$options.formTypes.input"
+          required
+          :error="v$.name.$error"
+          placeholder="Имя"
+          :modelValue="name"
+          @update:modelValue="v => name = v"
+        />
+      </div>
+      <div class="form-field">
+        <form-custom-input
+          :format="$options.formTypes.input"
+          required
+          :error="v$.tel.$error"
+          placeholder="Телефон"
+          :modelValue="tel"
+          @update:modelValue="v => tel = v"
+        />
+      </div>
+      <div class="form-field">
+        <form-custom-input
+          :format="$options.formTypes.input"
+          required
+          :error="v$.email.$error"
+          placeholder="Почта"
+          :modelValue="email"
+          @update:modelValue="v => email = v"
+        />
+      </div>
+  </template>
+  </app-modal>
 </template>
 
 <script>
@@ -92,6 +220,11 @@ import CheckList from '@/components/CheckList'
 import InsuranceInfo from '@/components/InsuranceInfo'
 import InsuranceInfoList from '@/components/InsuranceInfoList'
 import SelectionPoint from '@/components/SelectionPoint'
+import FormCustomInput from '@/components/FormCustomInput'
+import { email, required, numeric } from '@vuelidate/validators'
+import useVuelidate from '@vuelidate/core/dist/index.esm'
+import { FORM_TYPE_CHOICE, FORM_TYPE_INPUT } from '@/consts'
+import sendForm from '@/sendForm'
 
 export default {
   name: 'AppBank',
@@ -105,8 +238,14 @@ export default {
     CheckList,
     InsuranceInfo,
     InsuranceInfoList,
-    SelectionPoint
+    SelectionPoint,
+    FormCustomInput
   },
+  formTypes: {
+    input: FORM_TYPE_INPUT,
+    choice: FORM_TYPE_CHOICE
+  },
+  setup () { return { v$: useVuelidate() } },
   data() {
     return {
       benefits: [
@@ -121,15 +260,91 @@ export default {
         'Для заключения <br>контрактов',
         'Гарантию выпускает банк-партнёр<br>СЕВЕРГАЗБАНК на основании<br>заключения ВСК'
       ],
-      exceptionIdx: 0
+      exceptionIdx: 0,
+
+      principal: '',
+      innPrincipal: '',
+      beneficiary: '',
+      innBeneficiary: '',
+      linkToPurchase: '',
+      typesOfContracts: {
+        values: ['44-ФЗ', '223-ФЗ', '185-ФЗ (615-ПП)'],
+        picked: ''
+      },
+      garantiesOfTypes: {
+        values: ['Для участия в конкурсе', 'Для заключения контракта', 'Для получения аванса', 'Для обеспечения гарантийных обязательств'],
+        picked: ''
+      },
+      termGuarantee: '',
+      warrantyPeriod: '',
+      name: '',
+      tel: '',
+      email: ''
     }
   },
   methods: {
     async openModal() {
-      const resOpenModal = await this.$refs.modal.open()
-      if (resOpenModal) {
-        console.log('логика отправки')
+      const send = await this.$refs.modalForm.open()
+      if (send) {
+        const result = await this.v$.$validate()
+        if (!result) return
+        const str =
+        `Принципал: ${this.principal};
+        ИНН Принципала: ${this.innPrincipal};
+        Бенефициар: ${this.beneficiary};
+        ИНН Бенефициара ${this.innBeneficiary};
+        Ссылка на закупку: ${this.linkToPurchase};
+        Вид контракта: ${this.typesOfContracts.picked};
+        Тип гарантии ${this.garantiesOfTypes.picked};
+        Сумма гарантии: ${this.termGuarantee};
+        Срок гарантии: ${this.warrantyPeriod};
+        name ${this.name};
+        tel: ${this.tel};
+        email: ${this.email}`
+
+        try {
+          await sendForm(str)
+          this.$refs.modalForm.assecc()
+          this.clearModal()
+        } catch (e) {
+          alert('Не получилось отправить письмо на почту. Попробуйте снова!')
+        }
       }
+    },
+    clearModal() {
+      this.$v.$reset()
+      this.principal = ''
+      this.innPrincipal = ''
+      this.beneficiary = ''
+      this.innBeneficiary = ''
+      this.linkToPurchase = ''
+      this.typesOfContracts.picked = null
+      this.garantiesOfTypes.picked = null
+      this.termGuarantee = ''
+      this.warrantyPeriod = ''
+      this.name = ''
+      this.tel = ''
+      this.email = ''
+    }
+  },
+  validations () {
+    return {
+      principal: { required },
+      innPrincipal: { required, numeric },
+      beneficiary: { required },
+      innBeneficiary: { required, numeric },
+      linkToPurchase: {},
+      typesOfContracts: {
+        picked: { required }
+      },
+      garantiesOfTypes: {
+        picked: { required }
+      },
+      termGuarantee: { required, numeric },
+      warrantyPeriod: { required },
+      name: { required },
+      tel: { required },
+      email: { required, email }
     }
   }
 }
@@ -141,7 +356,19 @@ export default {
 
 .bank {
   &--mb {
-    margin-bottom: 127px;
+    margin-bottom: 60px;
+
+    @media (min-width: 560px) {
+      margin-top: 70px;
+    }
+
+    @media (min-width: 968px) {
+      margin-top: 100px;
+    }
+
+    @media (min-width: 1220px) {
+      margin-bottom: 127px;
+    }
   }
 
   &--btn {
@@ -343,6 +570,12 @@ export default {
 
   &-image {
     width: 100%;
+  }
+}
+
+.form-field {
+  &:not(:last-child) {
+    margin-bottom: 8px;
   }
 }
 </style>

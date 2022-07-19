@@ -121,35 +121,135 @@
       Заполните форму
     </template>
     <template #form>
-      <template
-        v-for="({placeholder, type, reqiured, value, picked}, idx) of formInputsList"
-        :key="placeholder"
-      >
+      <div class="form-field">
         <form-custom-input
-          v-if="type === $options.formTypes.input"
-          :format="type"
-          :required="reqiured"
-          :placeholder="placeholder"
-          :modelValue="value"
-          @update:modelValue="v => formInputsList[idx].value = v"
-          class="form-field"
+          :format="$options.formTypes.input"
+          required
+          placeholder="Принципал"
+          :modelValue="principal"
+          :error="v$.principal.$error"
+          @update:modelValue="v => principal = v"
         />
+      </div>
+      <div class="form-field">
         <form-custom-input
-          v-else-if="type === $options.formTypes.choice"
-          :format="type"
-          :required="reqiured"
-          :placeholder="placeholder"
-          :valuesList="value"
-          :modelValue="picked"
-          @update:modelValue="v => formInputsList[idx].picked = v"
-          class="form-field"
+          :format="$options.formTypes.input"
+          required
+          :error="v$.innPrincipal.$error"
+          placeholder="Инн принципала"
+          :modelValue="innPrincipal"
+          @update:modelValue="v => innPrincipal = v"
         />
-      </template>
+      </div>
+      <div class="form-field">
+        <form-custom-input
+          :format="$options.formTypes.input"
+          required
+          :error="v$.beneficiary.$error"
+          placeholder="Бенефициар"
+          :modelValue="beneficiary"
+          @update:modelValue="v => beneficiary = v"
+        />
+      </div>
+      <div class="form-field">
+        <form-custom-input
+          :format="$options.formTypes.input"
+          required
+          :error="v$.innBeneficiary.$error"
+          placeholder="ИНН бенефициара"
+          :modelValue="innBeneficiary"
+          @update:modelValue="v => innBeneficiary = v"
+        />
+      </div>
+      <div class="form-field">
+        <form-custom-input
+          :format="$options.formTypes.input"
+          required
+          :error="v$.linkToPurchase.$error"
+          placeholder="Ссылка на закупку"
+          :modelValue="linkToPurchase"
+          @update:modelValue="v => linkToPurchase = v"
+        />
+      </div>
+      <div class="form-field">
+        <form-custom-input
+          :format="$options.formTypes.choice"
+          required
+          :error="v$.typesOfContracts.picked.$error"
+          placeholder="Вид контрактов"
+          :valuesList="typesOfContracts.values"
+          :modelValue="typesOfContracts.picked"
+          @update:modelValue="v => typesOfContracts.picked = v"
+        />
+      </div>
+      <div class="form-field">
+        <form-custom-input
+          :format="$options.formTypes.choice"
+          required
+          :error="v$.garantiesOfTypes.picked.$error"
+          placeholder="Тип гарантий"
+          :valuesList="garantiesOfTypes.values"
+          :modelValue="garantiesOfTypes.picked"
+          @update:modelValue="v => garantiesOfTypes.picked = v"
+        />
+      </div>
+      <div class="form-field">
+        <form-custom-input
+          :format="$options.formTypes.input"
+          required
+          :error="v$.termGuarantee.$error"
+          placeholder="Сумма гарантий"
+          :modelValue="termGuarantee"
+          @update:modelValue="v => termGuarantee = v"
+        />
+      </div>
+      <div class="form-field">
+        <form-custom-input
+          :format="$options.formTypes.input"
+          required
+          :error="v$.warrantyPeriod.$error"
+          placeholder="Срок гарантий"
+          :modelValue="warrantyPeriod"
+          @update:modelValue="v => warrantyPeriod = v"
+        />
+      </div>
+      <div class="form-field">
+        <form-custom-input
+          :format="$options.formTypes.input"
+          required
+          :error="v$.name.$error"
+          placeholder="Имя"
+          :modelValue="name"
+          @update:modelValue="v => name = v"
+        />
+      </div>
+      <div class="form-field">
+        <form-custom-input
+          :format="$options.formTypes.input"
+          required
+          :error="v$.tel.$error"
+          placeholder="Телефон"
+          :modelValue="tel"
+          @update:modelValue="v => tel = v"
+        />
+      </div>
+      <div class="form-field">
+        <form-custom-input
+          :format="$options.formTypes.input"
+          required
+          :error="v$.email.$error"
+          placeholder="Почта"
+          :modelValue="email"
+          @update:modelValue="v => email = v"
+        />
+      </div>
     </template>
   </app-modal>
 </template>
 
 <script>
+import useVuelidate from '@vuelidate/core'
+import { required, email } from '@vuelidate/validators'
 import AppHeader from '@/components/AppHeader.vue'
 import AppFooter from '@/components/AppFooter'
 import AppTitle from '@/components/AppTitle'
@@ -183,6 +283,7 @@ export default {
     input: FORM_TYPE_INPUT,
     choice: FORM_TYPE_CHOICE
   },
+  setup () { return { v$: useVuelidate() } },
   data() {
     return {
       exceptionIdx: 0,
@@ -209,74 +310,44 @@ export default {
         }
       ],
 
-      formInputsList: [
-        {
-          type: FORM_TYPE_INPUT,
-          reqiured: true,
-          value: '',
-          placeholder: 'Принципал'
-        },
-        {
-          type: FORM_TYPE_INPUT,
-          reqiured: true,
-          value: '',
-          placeholder: 'ИНН Принципала'
-        },
-        {
-          type: FORM_TYPE_INPUT,
-          reqiured: true,
-          value: '',
-          placeholder: 'Бенефициар'
-        },
-        {
-          type: FORM_TYPE_INPUT,
-          reqiured: true,
-          value: '',
-          placeholder: 'ИНН Бенефициара'
-        },
-        {
-          type: FORM_TYPE_INPUT,
-          reqiured: false,
-          value: '',
-          placeholder: 'Ссылка на закупку'
-        },
-        {
-          type: FORM_TYPE_CHOICE,
-          value: ['44-ФЗ', '223-ФЗ', '185-ФЗ (615-ПП)'],
-          picked: null,
-          placeholder: 'Вид контрактов'
-        },
-        {
-          type: FORM_TYPE_CHOICE,
-          placeholder: 'Тип гарантии',
-          picked: null,
-          value: ['Для участия в конкурсе', 'Для заключения контракта', 'Для получения аванса', 'Для обеспечения гарантийных обязательств']
-        },
-        {
-          type: FORM_TYPE_INPUT,
-          reqiured: true,
-          value: '',
-          placeholder: 'Срок гарантии'
-        },
-        {
-          type: FORM_TYPE_INPUT,
-          reqiured: true,
-          value: '',
-          placeholder: 'Имя'
-        },
-        {
-          type: FORM_TYPE_INPUT,
-          reqiured: true,
-          value: '',
-          placeholder: 'Телефон'
-        },
-        {
-          type: FORM_TYPE_INPUT,
-          reqiured: false,
-          value: '',
-          placeholder: 'Электронная почта'
-        }
-      ]
+      principal: '',
+      innPrincipal: '',
+      beneficiary: '',
+      innBeneficiary: '',
+      linkToPurchase: '',
+      typesOfContracts: {
+        values: ['44-ФЗ', '223-ФЗ', '185-ФЗ (615-ПП)'],
+        picked: ''
+      },
+      garantiesOfTypes: {
+        values: ['Для участия в конкурсе', 'Для заключения контракта', 'Для получения аванса', 'Для обеспечения гарантийных обязательств'],
+        picked: ''
+      },
+      termGuarantee: '',
+      warrantyPeriod: '',
+      name: '',
+      tel: '',
+      email: ''
+    }
+  },
+  validations () {
+    return {
+      principal: { required },
+      innPrincipal: { required },
+      beneficiary: { required },
+      innBeneficiary: { required },
+      linkToPurchase: { required },
+      typesOfContracts: {
+        picked: { required }
+      },
+      garantiesOfTypes: {
+        picked: { required }
+      },
+      termGuarantee: { required },
+      warrantyPeriod: { required },
+      name: { required },
+      tel: { required },
+      email: { required, email }
     }
   },
   computed: {
@@ -291,7 +362,11 @@ export default {
     async openModalForm() {
       const send = await this.$refs.modalForm.open()
       if (send) {
-        console.log('res await :', send)
+        const result = await this.v$.$validate()
+        console.log('res await :', result)
+        if (!result) return
+        console.log('res await no error:', result)
+        this.$refs.modalForm.assecc()
       }
     }
   }

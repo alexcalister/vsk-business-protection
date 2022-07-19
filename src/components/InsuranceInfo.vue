@@ -71,11 +71,12 @@ export default {
 
     @media (min-width: 968px) {
       padding: 55px 70px 60px 58px;
-      flex-basis: 50%;
+      flex-basis: calc(50% - 128px);
     }
 
     @media (min-width: 1220px) {
       padding: 66px 82px 76px 60px;
+      flex-basis: calc(50% - 142px);
     }
   }
 }

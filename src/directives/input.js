@@ -1,27 +1,12 @@
-import { PHONE } from '@/consts'
-
-const input = {
-  created(el, binding) {
-    const { arg, value } = binding
-    // oldValue
-
-    if (!arg) return
-
-    switch (arg) {
-      case PHONE:
-        return phoneModified(value)
-    }
-  },
-  beforeUpdate() {},
-  beforeUnmount() {}
-}
-
-function phoneModified(num) {
-  console.log(num)
-}
-
-export default {
-  directives: {
-    input
-  }
-}
+// import { NUMBER_CRUSHING, PHONE_MODIFICATOR } from '@/consts'
+// const instances = []
+//
+// export const input = {
+//   // created(el, { arg, value }) {
+//   //   if (!arg) return
+//   // },
+//   // beforeUpdate() {},
+//   // beforeUnmount() {
+//   //   instances.forEach(fn => fn()())
+//   // }
+// }

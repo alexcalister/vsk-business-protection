@@ -1,24 +1,18 @@
 <template>
-  <ul class="abstract-list">
-    <li
-      v-for="(item, idx) of list"
-      class="abstract-list__item"
+  <li
+    class="item"
+    :class="{
+      active: exceptionIdx === idx,
+      'item--border': !(idx === listLength - 1 || idx === listLength - 2)
+    }"
+    @click="setActiveItem"
+  >
+    <span v-html="text"></span>
+    <b
       :class="{ active: exceptionIdx === idx}"
-      :style="{
-        'border-bottom': idx === list.length - 1 || idx === list.length - 2
-          ? '' : '2px solid #E5E5E5'
-      }"
-      :key="idx"
-      :data-num="idx + 1"
-      @click="setActiveItem(idx)"
-    >
-      {{ item }}
-      <b
-        :class="{ active: exceptionIdx === idx}"
-        class="abstract-list__item-num"
-      >{{ idx + 1 }}</b>
-    </li>
-  </ul>
+      class="item-num"
+    >{{ idx + 1 }}</b>
+  </li>
 </template>
 
 <script>
@@ -28,20 +22,26 @@ export default {
     'update:modelValue': v => typeof v === 'number'
   },
   props: {
-    list: {
-      type: Array,
+    exceptionIdx: {
+      type: Number,
+      default: 0
+    },
+    text: {
+      type: String,
+      default: ''
+    },
+    idx: {
+      type: Number,
+      required: true
+    },
+    listLength: {
+      type: Number,
       required: true
     }
   },
-  data() {
-    return {
-      exceptionIdx: 0
-    }
-  },
   methods: {
-    setActiveItem(idx) {
-      this.exceptionIdx = idx
-      this.$emit('update:modelValue', this.exceptionIdx)
+    setActiveItem() {
+      this.$emit('update:modelValue', this.idx)
     }
   }
 }
@@ -49,41 +49,36 @@ export default {
 
 <style lang="scss" scoped>
 @use "@/assets/styles/_mixins.scss";
-@import "@/assets/styles/_colors.scss";
+@use "@/assets/styles/_colors.scss";
 
-.abstract-list {
+.item {
+  position: relative;
   display: flex;
-  width: 100%;
-  list-style-type: none;
-  flex-wrap: wrap;
-  padding: 0;
-  margin: 0;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 17px 14px 15px 20px;
+  flex-basis: calc(50% - 34px);
+  color: colors.$textDark;
+  box-shadow: 0 -3px 12px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 
-  &__item {
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    padding: 17px 14px 15px 20px;
-    flex-basis: calc(50% - 34px);
-    color: $textDark;
-    box-shadow: 0 -3px 12px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
+  &.active {
+    color: colors.$textWhite;
+    background-color: colors.$accentDark;
+    box-shadow: -6px 0 24px rgba(0, 111, 186, 0.3);
+  }
+
+  &--border {
+    border-bottom: 2px solid #E5E5E5;
+  }
+
+  &-num {
+  color: colors.$textGray;
+  @include mixins.setFontParams(800, 70px);
+  line-height: 1;
 
     &.active {
-      color: $textWhite;
-      background-color: $accentDark;
-      box-shadow: -6px 0 24px rgba(0, 111, 186, 0.3);
-    }
-
-    &-num {
-      color: $textGray;
-      @include mixins.setFontParams(800, 70px);
-      line-height: 1;
-
-      &.active {
-        color: $textLighten;
-      }
+      color: colors.$textLighten;
     }
   }
 }

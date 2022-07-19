@@ -1,20 +1,64 @@
 <template>
   <input
-    v-if="format === 'input'"
-    :value="value"
+    v-if="format === $options.formTypes.input"
+    :value="modelValue"
     :placeholder="setPlaceholder"
+    @input="$emit('update:modelValue', $event.target.value)"
     class="custom-input"
-    type="text">
-  <div v-else-if="format === 'select'"></div>
+    type="text"
+  >
+  <div
+    v-else-if="format === $options.formTypes.choice"
+    @click="showSelect = !showSelect"
+    style="position: relative"
+  >
+    <div
+      class="custom-input"
+      :style="{
+        'z-index': showSelect ? 7 : 1
+      }"
+    >
+      {{ setPlaceholder }}
+    </div>
+    <div
+      class="custom-input-select__dropdown custom-input"
+      v-show="showSelect"
+      @click.stop
+    >
+      <template v-for="(value, idx) of valuesList" :key="value">
+        <div class="custom-input-select__group">
+          <input
+            class="custom-input-select__input"
+            type="radio"
+            :id="placeholder + idx"
+            :value="value"
+            v-model="choiceValue"
+            @change="$emit('update:modelValue', value)"
+          />
+          <label
+            class="custom-input-select__label"
+            :for="placeholder + idx"
+          >{{ value }}</label>
+        </div>
+      </template>
+    </div>
+  </div>
 </template>
 
 <script>
+import { FORM_TYPE_INPUT, FORM_TYPE_CHOICE } from '@/consts'
+
 export default {
   name: 'AppCustomInput',
+  formTypes: {
+    input: FORM_TYPE_INPUT,
+    choice: FORM_TYPE_CHOICE
+  },
   props: {
+    modelValue: [String, Array],
     format: {
       validator(value) {
-        return ['select', 'input'].includes(value)
+        return [FORM_TYPE_INPUT, FORM_TYPE_CHOICE].includes(value)
       }
     },
     required: {
@@ -25,6 +69,19 @@ export default {
     placeholder: {
       type: String,
       default: ''
+    },
+    valuesList: {
+      type: Array,
+      default: () => ([])
+    }
+  },
+  emits: {
+    'update:modelValue': v => typeof v === 'string'
+  },
+  data() {
+    return {
+      choiceValue: null,
+      showSelect: false
     }
   },
   computed: {
@@ -36,11 +93,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/styles/colors';
+@use '@/assets/styles/_mixins.scss';
+@use '@/assets/styles/colors';
+
 .custom-input {
+  position: relative;
   border: 2px solid #94C7E9;
   border-radius: 30px;
-  background-color: $textWhite;
+  background-color: colors.$textWhite;
   padding: 21px 27px;
 
   &::-webkit-input-placeholder,
@@ -48,6 +108,63 @@ export default {
   &:-moz-placeholder,
   &:-ms-input-placeholder  {color:#C5C5C5;}
 
-  color: $textDark;
+  color: colors.$textDark;
+
+  &-select {
+    &__group {
+      @include mixins.setFontParams(400, 18px);
+
+      &:not(:last-child) {
+        margin-bottom: 13px;
+      }
+    }
+
+    &__dropdown {
+      position: absolute;
+      width: calc(100% - 56px);
+      top: 2px;
+      left: -1px;
+      padding-top: 90px;
+      z-index: 6;
+    }
+
+    &__input {
+      display: none;
+    }
+
+    &__input:checked + &__label:before {
+      display: block;
+    }
+
+    &__label {
+      margin-left: 19px;
+      position: relative;
+      display: inline-block;
+
+      &:after, &:before {
+        content: '';
+        position: absolute;
+        left: -14px;
+        top: 10px;
+        transform: translate(-100%, -50%);
+        border-radius: 50%;
+      }
+
+      &:after {
+        width: 21px;
+        height: 21px;
+        background: colors.$textAccent;
+      }
+
+      &:before {
+        display: none;
+        width: 9px;
+        height: 9px;
+        background: colors.$textWhite;
+        z-index: 1;
+        transform: translate(-160%, -50%);
+      }
+    }
+  }
 }
 </style>

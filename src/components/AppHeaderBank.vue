@@ -27,7 +27,7 @@
 
 <script>
 export default {
-  name: 'AppHeader',
+  name: 'AppHeaderBank',
   data() {
     return {
       links: [
@@ -54,7 +54,7 @@ export default {
   },
   computed: {
     isMobile() {
-      return this.windowWidth <= 786
+      return this.windowWidth <= 820
     }
   },
   mounted() {
@@ -79,12 +79,26 @@ export default {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  color: #3F4042;
+  color: colors.$textDark;
   z-index: 2;
-  position: relative;
+  border-radius: 0 0 30px 30px;
+  border-top: none;
+  padding: 30px;
+  margin: 0;
+  position: absolute;
+  width: calc(100% - 60px);
 
-  @media (min-width: 786px) {
+  @media (min-width: 820px) {
+    width: auto;
+    position: relative;
+    border: 1px solid #A5DCFE;
+    margin: 0 20px 24px;
     justify-content: flex-start;
+  }
+
+  @media (min-width: 1100px) {
+    padding: 55px 103px 34px 116px;
+    margin: 0 20px 24px;
   }
 
   &-logo {
@@ -104,7 +118,7 @@ export default {
     transition: all .3s ease;
     cursor: pointer;
 
-    @media (min-width: 786px) {
+    @media (min-width: 820px) {
       display: none;
     }
 
@@ -164,13 +178,14 @@ export default {
       background-position-y: 40vh;
     }
 
-    @media (min-width: 786px) {
+    @media (min-width: 820px) {
       display: block;
+      width: 100%;
       margin-left: 50px;
     }
 
     @media (min-width: 1100px) {
-      margin-left: 190px;
+      margin-left: 135px;
     }
 
     &-wrapper {
@@ -178,6 +193,7 @@ export default {
       margin: 0;
       list-style-type: none;
       display: flex;
+      justify-content: space-between;
     }
 
     &.active &-wrapper {

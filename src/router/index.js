@@ -1,7 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
+import sourceData from '@/assets/JSON/sourceData.json'
+
 import PageHome from '@/pages/Home'
+import PageInsuranceProducts from '@/pages/InsuranceProducts'
 import PageNotFound from '@/pages/NotFound'
+import PageBank from '@/pages/Bank'
 
 const routes = [
   {
@@ -10,14 +14,20 @@ const routes = [
     name: 'Home'
   },
   {
+    path: '/bank',
+    component: PageBank,
+    name: 'AppBank'
+  },
+  {
     path: '/insurance-products/:id',
-    component: PageThreadShow,
-    name: 'ThreadShow',
+    component: PageInsuranceProducts,
+    name: 'InsuranceProducts',
     props: true,
     beforeEnter(to, from, next) {
       //  проверить на существование
-      const thread = sourceData.threads.find(thread => thread.id === to.params.id)
-      if (thread) {
+      const page = sourceData.pages.find(page => page.id === to.params.id)
+      console.log('page: ', page)
+      if (page?.file) {
         next()
       } else {
         next({
@@ -38,6 +48,9 @@ const routes = [
 ]
 
 export default createRouter({
+  scrollBehavior(to, from, savedPosition) {
+    return { top: 0 }
+  },
   history: createWebHistory(),
-  routes,
+  routes
 })

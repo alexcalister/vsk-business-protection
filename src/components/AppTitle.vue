@@ -18,14 +18,26 @@ export default {
 
 <style scoped lang="scss">
 @use '@/assets/styles/mixins';
-@import '@/assets/styles/colors';
+@use '@/assets/styles/colors';
 
 .section-heading {
-  @include mixins.setFontParams(800, 50px);
-  color: $textAccent;
+  @include mixins.setFontParams(800, 30px);
+  color: colors.$textAccent;
   margin-bottom: 86px;
   position: relative;
   display: block;
+
+  @media (min-width: 560px) {
+    font-size: 35px;
+  }
+
+  @media (min-width: 968px) {
+    font-size: 43px;
+  }
+
+  @media (min-width: 1220px) {
+    font-size: 50px;
+  }
 
   &:after {
    content: '';
@@ -34,15 +46,17 @@ export default {
    left: 0;
    width: 90px;
    height: 3px;
-   background: $textAccentDark;
+   background: colors.$textAccentDark;
  }
 
   &.inversion {
-    text-align: right;
+    @media (min-width: 986px) {
+      text-align: right;
 
-    &:after {
-      left: auto;
-      right: 0;
+      &:after {
+        left: auto;
+        right: 0;
+      }
     }
   }
 }

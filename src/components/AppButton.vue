@@ -1,5 +1,5 @@
 <template>
-  <button class="btn" @click="handlerClick">
+  <button class="btn" @click="$emit('click')">
     <slot></slot>
   </button>
 </template>
@@ -7,8 +7,8 @@
 <script>
 export default {
   name: 'AppButton',
-  methods: {
-    handlerClick() {}
+  emits: {
+    click: null
   }
 }
 </script>

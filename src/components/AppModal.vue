@@ -1,17 +1,19 @@
 <template>
   <div
     v-if="showModal"
-    @click="showModal = false"
+    @click="close"
     class="modal"
   >
     <div @click.stop class="modal-content">
       <!--  Modal Header  -->
       <header class="modal-header">
-        <!--  Close Button  -->
-        <span @click="showModal = false" class="modal-btn-close" />
         <!--  Title  -->
         <span class="modal-title">
           <slot name="title"></slot>
+        </span>
+        <!--  Close Button  -->
+        <span @click="close" class="modal-btn-close">
+          &#10008;
         </span>
       </header>
 
@@ -21,17 +23,49 @@
       </form>
 
       <!--  Send Form  -->
-      <app-button class="modal-btn-send">Отправить</app-button>
+      <app-button
+        @click="send"
+        class="modal-btn-send"
+      >Отправить</app-button>
     </div>
   </div>
 </template>
 
 <script>
+import { disableScroll, enablesScroll } from '@/windowScroll'
+
 export default {
   name: 'AppModal',
   data() {
     return {
-      showModal: true
+      showModal: false
+    }
+  },
+  modalController: {
+    resolve: null
+  },
+  methods: {
+    send() {
+      enablesScroll()
+      this.showModal = false
+      this.$options.modalController.resolve(true)
+    },
+    open() {
+      let res = null
+      const modalPromise = new Promise(resolve => {
+        res = resolve
+      })
+
+      this.$options.modalController.resolve = res
+      this.showModal = true
+      disableScroll()
+
+      return modalPromise
+    },
+    close() {
+      enablesScroll()
+      this.showModal = false
+      this.$options.modalController.resolve(false)
     }
   }
 }
@@ -39,7 +73,7 @@ export default {
 
 <style lang="scss" scoped>
 @use "@/assets/styles/_mixins.scss";
-@import "@/assets/styles/_colors.scss";
+@use "@/assets/styles/_colors.scss";
 
 .modal {
   position: fixed;
@@ -54,9 +88,10 @@ export default {
   z-index: 5;
   width: 100%;
   max-height: 100vh;
+  min-height: 100vh;
 
   &-content {
-    background: $bgGentle;
+    background: colors.$bgGentle;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
     border-radius: 22px;
     padding: 50px 98px 58px;
@@ -70,15 +105,11 @@ export default {
     display: flex;
     justify-content: space-between;
     margin-bottom: 35px;
+    align-items: center;
   }
 
   &-title {
     @include mixins.setFontParams(600, 26px);
-  }
-
-  &-close-btn {
-    display: inherit;
-    margin: 44px auto 0;
   }
 
   &-form {
@@ -87,7 +118,14 @@ export default {
   }
 
   &-btn {
-    &-close {}
+    &-close {
+      display: inherit;
+      width: 20px;
+      height: 20px;
+      color: colors.$textDark;
+      font-size: 20px;
+      cursor: pointer;
+    }
 
     &-send {
       padding: 15px 60px !important;

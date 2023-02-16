@@ -1,5 +1,5 @@
 export default function(str) {
-  const HOST = 'https://apivsk.bexram.online'
+  const HOST = 'https://api.vskcorp.ru'
   const url = new URL(HOST + '/buisness_protection/send_mail/')
 
   try {
@@ -8,7 +8,7 @@ export default function(str) {
       body: JSON.stringify({
         title: 'Новый клиент',
         text: str,
-        recipient: 'tigr.kman@gmail.com'
+        recipient: 'garantiya@vsk.ru'
       }),
       headers: {
         'Content-Type': 'application/json'
